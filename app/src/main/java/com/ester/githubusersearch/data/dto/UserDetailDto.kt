@@ -3,6 +3,7 @@ package com.ester.githubusersearch.data.dto
 import android.os.Parcel
 import android.os.Parcelable
 import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.squareup.moshi.Json
 import kotlinx.parcelize.Parceler
 import kotlinx.parcelize.Parcelize
@@ -10,6 +11,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 @Entity(tableName = "user_detail")
 data class UserDetailDto(
+    @PrimaryKey
     @field:Json(name = "login")
     val login: String,
     @field:Json(name = "avatar_url")

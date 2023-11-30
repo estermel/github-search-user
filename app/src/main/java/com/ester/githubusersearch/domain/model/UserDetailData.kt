@@ -1,7 +1,7 @@
 package com.ester.githubusersearch.domain.model
 
 data class UserDetailData(
-    val login: Unit,
+    val login: String,
     val avatarUrl: String,
     val htmlUrl: String,
     val name: String,

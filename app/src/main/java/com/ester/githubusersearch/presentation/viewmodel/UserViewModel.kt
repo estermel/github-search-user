@@ -10,7 +10,6 @@ import com.ester.githubusersearch.domain.model.UserSearchData
 import com.ester.githubusersearch.domain.repo.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
@@ -60,7 +59,7 @@ class UserViewModel @Inject constructor(
                 getUserDetail(username)
             } else {
                 runBlocking(Dispatchers.IO) {
-                    _userDetail = cache.first().toUserDetailMap()
+                    _userDetail = cache.toUserDetailMap()
                 }
             }
         }
