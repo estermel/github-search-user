@@ -30,6 +30,10 @@ android {
         arg("room.schemaLocation", "$projectDir/schemas")
     }
 
+    hilt {
+        enableAggregatingTask = false
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -68,7 +72,7 @@ dependencies {
 
     // glide
     implementation("com.github.bumptech.glide:glide:4.5.0")
-    ksp("com.github.bumptech.glide:compiler:4.4.0")
+    ksp("com.github.bumptech.glide:compiler:4.5.0")
 
     // hilt
     implementation("com.google.dagger:hilt-android:2.48.1")
