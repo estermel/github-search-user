@@ -1,4 +1,4 @@
-package com.ester.githubusersearch.domain
+package com.ester.githubusersearch.domain.model
 
 data class UserDetailData(
     val login: String,

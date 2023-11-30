@@ -1,4 +1,4 @@
-package com.ester.githubusersearch.data
+package com.ester.githubusersearch.data.dto
 
 import com.squareup.moshi.Json
 
