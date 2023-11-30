@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/searchUserFragment">
+
+    <fragment
+        android:id="@+id/searchUserFragment"
+        android:name="com.ester.githubusersearch.presentation.ui.SearchUserFragment"
+        android:label="SearchUserFragment"
+        tools:layout="@layout/fragment_search_user">
+        <action
+            android:id="@+id/action_searchUserFragment_to_userListFragment"
+            app:destination="@id/userListFragment"/>
+    </fragment>
+    <fragment
+        android:id="@+id/userListFragment"
+        android:name="com.ester.githubusersearch.presentation.ui.UserListFragment"
+        android:label="UserListFragment"
+        tools:layout="@layout/fragment_user_list">
+        <action
+            android:id="@+id/action_userListFragment_to_userDetailFragment"
+            app:destination="@id/userDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userDetailFragment"
+        android:name="com.ester.githubusersearch.presentation.ui.UserDetailFragment"
+        android:label="UserDetailFragment"
+        tools:layout="@layout/fragment_user_detail">
+        <action
+            android:id="@+id/action_userDetailFragment_to_userListFragment"
+            app:popUpTo="@id/userListFragment" />
+    </fragment>
+</navigation>

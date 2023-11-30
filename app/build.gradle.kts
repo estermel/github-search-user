@@ -34,6 +34,11 @@ android {
         enableAggregatingTask = false
     }
 
+    buildFeatures {
+        dataBinding = true
+        viewBinding = true
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -69,6 +74,8 @@ dependencies {
     // ui
     implementation("com.google.android.material:material:1.10.0")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.5")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.5")
 
     // glide
     implementation("com.github.bumptech.glide:glide:4.5.0")
