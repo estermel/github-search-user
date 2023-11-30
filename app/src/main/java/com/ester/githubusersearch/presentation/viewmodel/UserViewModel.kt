@@ -3,12 +3,16 @@ package com.ester.githubusersearch.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ester.githubusersearch.data.db.UserDb
+import com.ester.githubusersearch.data.mapper.toUserDetailMap
 import com.ester.githubusersearch.domain.Resource
 import com.ester.githubusersearch.domain.model.UserDetailData
 import com.ester.githubusersearch.domain.model.UserSearchData
 import com.ester.githubusersearch.domain.repo.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,11 +42,26 @@ class UserViewModel @Inject constructor(
         }
     }
 
-    fun getUserDetail(username: String) {
+    private fun getUserDetail(username: String) {
         viewModelScope.launch {
             when (val result = repository.getUserDetail(username)) {
                 is Resource.Success -> _userDetail = result.data
                 is Resource.Error -> _errorMessage = result.message
+            }
+        }
+    }
+
+    fun getUserDetailCache(username: String) {
+        viewModelScope.launch {
+            val isUserDetailNotFound = db.userDetailDao.isUserDetailNotFound(username)
+            val cache = db.userDetailDao.getUserDetail(username)
+
+            if (isUserDetailNotFound) {
+                getUserDetail(username)
+            } else {
+                runBlocking(Dispatchers.IO) {
+                    _userDetail = cache.first().toUserDetailMap()
+                }
             }
         }
     }
