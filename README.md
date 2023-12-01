@@ -43,6 +43,7 @@ MVVM (Model-View-ViewModel)
 
 
 ### limitations
+- started working on this project yesterday (Thursday), today is Friday, i did run some errands and only got less than 24 hours in total to finish this project
 - only get 1 page, with 50 search results (users) in 1 page
 - not covered with unit testing yet
 - no infinite scroll
