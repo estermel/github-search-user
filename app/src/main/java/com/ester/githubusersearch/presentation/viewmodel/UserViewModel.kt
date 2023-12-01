@@ -49,36 +49,12 @@ class UserViewModel @Inject constructor(
         }
     }
 
-    private fun insert(user: UserDetailData) {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                db.userDetailDao.insert(
-                    UserDetailDto(
-                        user.login,
-                        user.avatarUrl,
-                        user.htmlUrl,
-                        user.name,
-                        user.company,
-                        user.blog,
-                        user.location,
-                        user.bio,
-                        user.twitterUsername,
-                        user.publicRepos,
-                        user.publicGists,
-                        user.followers,
-                        user.following
-                    )
-                )
-            }
-        }
-    }
 
     private fun getUserDetail(username: String) {
         viewModelScope.launch {
             when (val result = repository.getUserDetail(username)) {
                 is Resource.Success -> {
                     _userDetail.value = result.data
-                    result.data?.let { insert(it) }
                 }
 
                 is Resource.Error -> _errorMessage.value = result.message
@@ -89,11 +65,10 @@ class UserViewModel @Inject constructor(
     fun getUserDetailCache(username: String) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                val cache = db.userDetailDao.getUserDetail(username)
-
                 var errorThrown = true
 
                 try {
+                    val cache = db.userDetailDao.getUserDetail(username)
                     _userDetail.value = cache.toUserDetailMap()
                     errorThrown = false
                 } catch (e: Exception) {

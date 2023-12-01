@@ -74,7 +74,7 @@ class UserDetailFragment : Fragment() {
             if (user.name?.isBlank() == true)
                 tvName.visibility = View.GONE
 
-            if (user.twitterUsername?.isBlank() == true)
+            if (user.twitterUsername == null)
                 tvTwitterUsername.visibility = View.GONE
 
             if (user.blog?.isBlank() == true)
