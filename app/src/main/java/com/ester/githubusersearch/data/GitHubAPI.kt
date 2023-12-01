@@ -14,7 +14,7 @@ interface GitHubAPI {
         @Query("per_page") perPage: Int
     ): UserSearchDto
 
-    @GET("/users")
-    suspend fun getUserDetail(@Path("users") userLogin: String): UserDetailDto
+    @GET("/users/{user}")
+    suspend fun getUserDetail(@Path("user") user: String): UserDetailDto
 
 }

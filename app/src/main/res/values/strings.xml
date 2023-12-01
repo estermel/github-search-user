@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">GitHub User Search</string>
+    <string name="text_search_by_username">Search by username</string>
+    <string name="tex_user_not_found">User not found</string>
+    <string name="text_search_github_user_by_username">Search GitHub User by Username</string>
+    <string name="text_search_result">Search result</string>
+    <string name="sample_text_www_blog_com">www.blog.com</string>
+    <string name="sample_text_me_email_com">me@email.com</string>
+    <string name="sample_text_indonesia">Indonesia</string>
+    <string name="sample_text_working_at_company_xyz">working at company XYZ</string>
+    <string name="sample_text_bio">bio that takes long texts fits 3 lines</string>
+    <string name="sample_text_2_public_gists">2 public gists</string>
+    <string name="sample_text_8_public_repo">8 public repo</string>
+    <string name="sample_text_username_on_twitter">username on twitter</string>
+    <string name="sample_text_7_followings">7 followings</string>
+    <string name="sample_text_3_followers">3 followers</string>
+    <string name="sample_text_fullname">first name then last name</string>
+    <string name="sample_text_username">username</string>
 </resources>

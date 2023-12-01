@@ -19,19 +19,17 @@ data class UserDetailDto(
     @field:Json(name = "html_url")
     val htmlUrl: String,
     @field:Json(name = "name")
-    val name: String,
+    val name: String? = "",
     @field:Json(name = "company")
-    val company: String,
+    val company: String? = "",
     @field:Json(name = "blog")
-    val blog: String,
+    val blog: String? = "",
     @field:Json(name = "location")
-    val location: String,
-    @field:Json(name = "email")
-    val email: String,
+    val location: String? = "",
     @field:Json(name = "bio")
-    val bio: String,
+    val bio: String? = "",
     @field:Json(name = "twitter_username")
-    val twitterUsername: String,
+    val twitterUsername: String? = "",
     @field:Json(name = "public_repos")
     val publicRepos: Int,
     @field:Json(name = "public_gists")
@@ -50,7 +48,6 @@ data class UserDetailDto(
         UserDetailDto::company,
         UserDetailDto::blog,
         UserDetailDto::location,
-        UserDetailDto::email,
         UserDetailDto::bio,
         UserDetailDto::twitterUsername,
         UserDetailDto::publicRepos,
@@ -68,7 +65,6 @@ data class UserDetailDto(
             parcel.writeString(company)
             parcel.writeString(blog)
             parcel.writeString(location)
-            parcel.writeString(email)
             parcel.writeString(bio)
             parcel.writeString(twitterUsername)
             parcel.writeInt(publicRepos)
@@ -78,7 +74,6 @@ data class UserDetailDto(
         }
 
         override fun create(parcel: Parcel): UserDetailDto = UserDetailDto(
-            parcel.readString() ?: "",
             parcel.readString() ?: "",
             parcel.readString() ?: "",
             parcel.readString() ?: "",

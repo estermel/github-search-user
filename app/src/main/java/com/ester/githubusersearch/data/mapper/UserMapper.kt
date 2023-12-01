@@ -27,7 +27,6 @@ fun UserDetailDto.toUserDetailMap(): UserDetailData {
         company,
         blog,
         location,
-        email,
         bio,
         twitterUsername,
         publicRepos,

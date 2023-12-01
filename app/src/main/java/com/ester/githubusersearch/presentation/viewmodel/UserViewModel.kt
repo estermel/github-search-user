@@ -1,8 +1,11 @@
 package com.ester.githubusersearch.presentation.viewmodel
 
+import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ester.githubusersearch.data.db.UserDb
+import com.ester.githubusersearch.data.dto.UserDetailDto
 import com.ester.githubusersearch.data.mapper.toUserDetailMap
 import com.ester.githubusersearch.domain.Resource
 import com.ester.githubusersearch.domain.model.UserDetailData
@@ -11,7 +14,7 @@ import com.ester.githubusersearch.domain.repo.UserRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,23 +23,52 @@ class UserViewModel @Inject constructor(
     private val repository: UserRepository
 ) : ViewModel() {
 
-    private var _userSearchList: UserSearchData? = null
-    val userSearchList: UserSearchData?
+    private val _userSearchList = MutableLiveData<UserSearchData?>()
+
+    val userSearchList: MutableLiveData<UserSearchData?>
         get() = _userSearchList
 
-    private var _userDetail: UserDetailData? = null
-    val userDetail: UserDetailData?
+    private val _userDetail = MutableLiveData<UserDetailData?>()
+    val userDetail: MutableLiveData<UserDetailData?>
         get() = _userDetail
 
-    private var _errorMessage: String? = null
-    val errorMessage: String?
+    private val _errorMessage = MutableLiveData<String?>()
+
+    val errorMessage: MutableLiveData<String?>
         get() = _errorMessage
 
     fun search(username: String, page: Int, perPage: Int) {
         viewModelScope.launch {
             when (val result = repository.search(username, page, perPage)) {
-                is Resource.Success -> _userSearchList = result.data
-                is Resource.Error -> _errorMessage = result.message
+                is Resource.Success -> {
+                    _userSearchList.value = result.data
+                }
+
+                is Resource.Error -> _errorMessage.value = result.message
+            }
+        }
+    }
+
+    private fun insert(user: UserDetailData) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                db.userDetailDao.insert(
+                    UserDetailDto(
+                        user.login,
+                        user.avatarUrl,
+                        user.htmlUrl,
+                        user.name,
+                        user.company,
+                        user.blog,
+                        user.location,
+                        user.bio,
+                        user.twitterUsername,
+                        user.publicRepos,
+                        user.publicGists,
+                        user.followers,
+                        user.following
+                    )
+                )
             }
         }
     }
@@ -44,22 +76,31 @@ class UserViewModel @Inject constructor(
     private fun getUserDetail(username: String) {
         viewModelScope.launch {
             when (val result = repository.getUserDetail(username)) {
-                is Resource.Success -> _userDetail = result.data
-                is Resource.Error -> _errorMessage = result.message
+                is Resource.Success -> {
+                    _userDetail.value = result.data
+                    result.data?.let { insert(it) }
+                }
+
+                is Resource.Error -> _errorMessage.value = result.message
             }
         }
     }
 
     fun getUserDetailCache(username: String) {
         viewModelScope.launch {
-            val isUserDetailNotFound = db.userDetailDao.isUserDetailNotFound(username)
-            val cache = db.userDetailDao.getUserDetail(username)
+            withContext(Dispatchers.IO) {
+                val cache = db.userDetailDao.getUserDetail(username)
 
-            if (isUserDetailNotFound) {
-                getUserDetail(username)
-            } else {
-                runBlocking(Dispatchers.IO) {
-                    _userDetail = cache.toUserDetailMap()
+                var errorThrown = true
+
+                try {
+                    _userDetail.value = cache.toUserDetailMap()
+                    errorThrown = false
+                } catch (e: Exception) {
+                    Log.e("E", e.toString())
+                } finally {
+                    if (errorThrown)
+                        getUserDetail(username)
                 }
             }
         }
